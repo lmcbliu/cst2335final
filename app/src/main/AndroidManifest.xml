@@ -11,7 +11,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".LivingRoomActivity" />
         <activity android:name=".KitchenActivity" />
-        <activity android:name=".HouseActivity" />
+        <activity
+            android:name=".HouseActivity"
+            android:label="@string/HouseActivityName" />
         <activity android:name=".AutoActivity" />
         <activity
             android:name=".StartActivity"
@@ -23,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".HouseFragmentDetails"></activity>
     </application>
 
 </manifest>

@@ -61,7 +61,7 @@ public class StartActivity extends AppCompatActivity {
 
                 break;
             case R.id.house:
-                Intent intentHouse= new Intent(StartActivity.this, KitchenActivity.class);
+                Intent intentHouse= new Intent(StartActivity.this, HouseActivity.class);
                 startActivity(intentHouse);
                 startActivityForResult(intentHouse, 5);
 
@@ -69,7 +69,7 @@ public class StartActivity extends AppCompatActivity {
                 break;
 
             case R.id.auto:
-                Intent intentAuto= new Intent(StartActivity.this, KitchenActivity.class);
+                Intent intentAuto= new Intent(StartActivity.this, AutoActivity.class);
                 startActivity(intentAuto);
                 startActivityForResult(intentAuto, 5);
 
