@@ -1,9 +1,22 @@
 <resources>
-    <string name="app_name">CST2335Final</string>
-    <string name="welcom_message">Welcom to Final Project</string>
+    <string name="app_name">CST2335 Final Project</string>
+    <string name="welcom_message">Welcom to CST2355 Final Project</string>
     <string name="livingroom">Living Room</string>
     <string name="kitchen">Kitchen</string>
     <string name="house">House</string>
     <string name="auto">Automobile</string>
-    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_start">FinalProject</string>
+    <string name="autotemperature">Temperature</string>
+    <string name="autoradio">Radio</string>
+    <string name="autogps">GPS</string>
+    <string name="autolight">Light</string>
+    <string name="autohelp">Help</string>
+    <string name="autosettemperature">Set Vehicle Temperature</string>
+    <string name="autosetlowtemperature">Set The Lowest Vehicle Temperature</string>
+    <string name="autosethightemperature">Set The Highest Vehicle Temperature</string>
+    <string name="autotempset">Set</string>
+    <string name="autotempexit">Exit</string>
+    <string name="autotempdisplay">Display</string>
+
+    autotempbutton2
 </resources>
