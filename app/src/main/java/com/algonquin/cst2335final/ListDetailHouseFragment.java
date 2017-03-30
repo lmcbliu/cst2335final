@@ -34,7 +34,23 @@ public class ListDetailHouseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater , ViewGroup container,Bundle savedInstanceState){
         View gui = inflater.inflate(R.layout.house_fragment_layout,null);
         TextView textView = (TextView)gui.findViewById(R.id.houseFragmentTextView);
-        textView.setText("You clicked on ID: " + id);
+        switch ((int)id){
+            case 0://Garage
+                textView.setText("You clicked on ID: " + id+"\n This is Garage.");
+
+                ;
+                break;
+            case 1: //Home temperature
+                textView.setText("You clicked on ID: " + id+"\n This is Home temperature.");
+
+                ;
+                break;
+            case 2: //Outside weather
+                textView.setText("You clicked on ID: " + id+"\n This is weather.");
+
+                ;
+                break;
+        }
         return gui;
     }
 }
