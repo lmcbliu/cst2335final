@@ -40,6 +40,6 @@
     <string name="living_lamp2logout">Go Back</string>
     <string name="living_deletemessage">Delete This Item</string>
     <string name="living_roomcustombt">Customization CheckBox</string>
-
+    <string name="living_refreshbt">Refresh Status</string>
 
 </resources>

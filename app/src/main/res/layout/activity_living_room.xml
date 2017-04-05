@@ -9,19 +9,27 @@
     tools:context="com.algonquin.cst2335final.LivingRoomActivity">
 
     <TextView
+        android:id="@+id/livingroomwelcome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:singleLine="true"
         android:text="WELCOME TO SMART LIVINGROOM"
-        android:textColor="?android:attr/textColorHighlight"
+        android:textColor="@android:color/holo_red_light"
         android:textSize="25dp" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="30dp"
+        android:layout_below="@+id/livingroomwelcome"
         android:id="@+id/livinglists"/>
+
+    <ProgressBar
+        android:id="@+id/livingProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/livingroomcustombt" />
 
     <Button
         android:id="@+id/livingroomcustombt"
@@ -29,4 +37,13 @@
         android:layout_height="wrap_content"
         android:text="@string/living_roomcustombt"
         android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:id="@+id/livingroomrefreshbt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/living_refreshbt"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/livingroomcustombt"/>
+
 </RelativeLayout>

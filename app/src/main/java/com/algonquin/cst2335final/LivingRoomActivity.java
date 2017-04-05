@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +21,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class LivingRoomActivity extends AppCompatActivity {
+    String current, min, max, iconName;
+    Bitmap image;
+
     private Context ctx;
     private ListView livingroomlist;
     private String[] livingroom = {"Lamp On/Off", "Lamp Dimmable", "Lamp Colorful", "TV", "Window Blinds"};
@@ -36,6 +48,18 @@ public class LivingRoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_living_room);
+
+        Button btrefresh = (Button) findViewById(R.id.livingroomrefreshbt);
+        btrefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProgressBar livingProg = (ProgressBar) findViewById(R.id.livingProgressBar);
+                livingProg.setVisibility(View.VISIBLE);
+                LivingStatus livingStatus = new LivingStatus();
+                livingStatus.execute();
+            }
+        });
+
         ctx = this;
         bundle  = new Bundle();
         //Open a file for storing shared preferences:
@@ -471,6 +495,114 @@ public class LivingRoomActivity extends AppCompatActivity {
         }catch(Exception e) {
             //db.insert(livingDataHelper.TABLE_NAME, null, newValues);
         }
+    }
+
+    public class LivingStatus extends AsyncTask<String, Integer, String>{
+        @Override
+        protected String doInBackground(String... args){
+            String in = "";
+            try{
+                livingDataHelper = new LivingRoomDatabaseHelper(ctx);
+                db = livingDataHelper.getReadableDatabase();
+
+                //String query = String
+                //      .format("SELECT * FROM %s WHERE %s=%s", livingDataHelper.TABLE_NAME, livingDataHelper.LIVINGITEM_KEY,strname);
+                //results = db.rawQuery(query, null);
+
+                results = db.query(false, livingDataHelper.TABLE_NAME,
+                        new String[]{ livingDataHelper.LVINGITEM_ID, livingDataHelper.LIVINGITEM_KEY, livingDataHelper.LIVINGITEM_VALUE},
+                        livingDataHelper.LVINGITEM_ID + " not null",
+                        null, null, null, null, null);
+
+                int count = results.getCount();
+
+                results.moveToFirst();
+                while( ! results.isAfterLast() ){
+                    String str2 = results.getString(results.getColumnIndex(livingDataHelper.LIVINGITEM_KEY));
+                    if(str2.compareTo("Lamp1Status")==0){
+                        publishProgress(25);
+                        Thread.sleep(1000);
+                    }
+                    if(str2.compareTo("Lamp3Color")==0){
+                        publishProgress(50);
+                        Thread.sleep(1000);
+                    }
+                    if(str2.compareTo("BlindsHeight")==0){
+                        publishProgress(75);
+                        Thread.sleep(1000);
+                    }
+                    results.moveToNext();
+                }
+                publishProgress(100);
+                Thread.sleep(1000);
+            } catch (Exception me) {
+                Log.e("AsyncTask", "Malformed URL:" + me.getMessage());
+            }
+
+            return in;
+        }
+
+        public boolean fileExistance(String fname) {
+            File file = getBaseContext().getFileStreamPath(fname);
+            return file.exists();
+        }
+
+
+        public Bitmap getImage(URL url) {
+
+            HttpURLConnection connection = null;
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                int responseCode = connection.getResponseCode();
+                if (responseCode == 200) {
+                    return BitmapFactory.decodeStream(connection.getInputStream());
+                } else
+                    return null;
+            } catch (Exception e) {
+                return null;
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+        }
+
+        public Bitmap getImage(String urlString) {
+            try {
+                URL url = new URL(urlString);
+                return getImage(url);
+            } catch (MalformedURLException e) {
+                return null;
+            }
+        }
+
+        public void onProgressUpdate(Integer... values) {
+
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.livingProgressBar);
+            progressBar.setProgress(values[0]);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        public void onPostExecute(String result) {
+
+            /*
+            TextView currentTempView = (TextView) findViewById(R.id.currentTemp);
+            currentTempView.setText("Current:" + current);
+
+            TextView minTempView = (TextView) findViewById(R.id.minTemp);
+            minTempView.setText("Min:" + min);
+
+            TextView maxTempView = (TextView) findViewById(R.id.maxTemp);
+            maxTempView.setText("Max:" + max);
+
+            ImageView imageView = (ImageView) findViewById(R.id.weatherImageView);
+            imageView.setImageBitmap(image);*/
+
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.livingProgressBar);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+
     }
 }
 
