@@ -28,6 +28,9 @@
     <string name="autoactivitysetting">Set</string>
     <string name="autolightdim">Auto Light Dimable</string>
     <string name="autoheadlightswitch">Normal/High</string>
+    <string name="fmwelcome">Welcome to FM Radio Setting/High</string>
+    <string name="autoFmChannelName">Auto FM Channel Name</string>
+    <string name="fmChSet">set Channel</string>
 
 
 
