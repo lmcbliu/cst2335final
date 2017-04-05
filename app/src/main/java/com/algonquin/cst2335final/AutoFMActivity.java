@@ -32,7 +32,7 @@ public class AutoFMActivity extends AppCompatActivity {
     ListView listView;
     EditText fmChannelDesc;
     Button btnAutoSetChannel;
-    ArrayList< HashMap<String , String>> autoChannelArrayList;
+    ArrayList< String> autoChannelArrayList;
 
     Cursor autoChannelCursor;
 
@@ -47,7 +47,7 @@ public class AutoFMActivity extends AppCompatActivity {
     public static AutoFMActivity instance;
     FragmentManager fm;
     EditText channelName;
-    HashMap<String , String> hash;
+    //HashMap<String , String> hash;
 
 
     @Override
@@ -61,8 +61,11 @@ public class AutoFMActivity extends AppCompatActivity {
         btnAutoSetChannel = (Button) findViewById(R.id.autofmChSet);
         autoFMChannelAdapter = new AutoFMChannelAdapter(this);
         autoChannelArrayList = new ArrayList<>();
+        refreshMessages();
 
         listView.setAdapter(autoFMChannelAdapter);
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -115,15 +118,15 @@ public class AutoFMActivity extends AppCompatActivity {
 
         autoDatabaseHelper = new AutoDatabaseHelper(this);
         autoChannelDB = autoDatabaseHelper.getWritableDatabase();
-        autoChannelCursor = autoChannelDB.rawQuery("select FMChannelID,ChannelName from AutoFMChannelTable", null);
+        autoChannelCursor = autoChannelDB.rawQuery("select Channel from AutoFMChannelTable", null);
         int rows = autoChannelCursor.getCount();
         autoChannelCursor.moveToFirst();
         autoChannelArrayList.clear();
 
         while(!autoChannelCursor.isAfterLast() ) {
-            hash.put(autoChannelCursor.getString(autoChannelCursor.getColumnIndex(AutoDatabaseHelper.CHANNEL_ID)),
-                    autoChannelCursor.getString(autoChannelCursor.getColumnIndex(AutoDatabaseHelper.CHANNEL_NAME)));
-            autoChannelArrayList.add(hash);
+           // hash.put(autoChannelCursor.getString(autoChannelCursor.getColumnIndex(AutoDatabaseHelper.CHANNEL_ID)),
+           //         autoChannelCursor.getString(autoChannelCursor.getColumnIndex(AutoDatabaseHelper.CHANNEL_NAME)));
+            autoChannelArrayList.add(autoChannelCursor.getString(autoChannelCursor.getColumnIndex(AutoDatabaseHelper.CHANNEL_NAME)));
             autoChannelCursor.moveToNext();
         }
         autoFMChannelAdapter.notifyDataSetChanged();
@@ -143,7 +146,7 @@ public class AutoFMActivity extends AppCompatActivity {
         {
             autoChannelCursor.moveToPosition(position);
 
-            return autoChannelCursor.getLong( autoChannelCursor.getColumnIndex(AutoDatabaseHelper.CHANNEL_ID));
+            return autoChannelCursor.getLong( autoChannelCursor.getColumnIndex(AutoDatabaseHelper.CHANNEL_NAME));
         }
 
         @Override
