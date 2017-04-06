@@ -46,26 +46,31 @@ public class StartActivity extends AppCompatActivity {
 
             case R.id.livingroom:
                 Intent intentLivingRoom = new Intent(StartActivity.this, LivingRoomActivity.class);
-              //  startActivity(intentLivingRoom);
-                startActivityForResult(intentLivingRoom, 5);
+                startActivity(intentLivingRoom);
+
                 break;
 
             case R.id.kitchen:
-                Intent intentKitchen = new Intent(StartActivity.this, KitchenActivity.class);
-              //  startActivity(intentKitchen);
-                startActivityForResult(intentKitchen, 5);
+
+
+                startActivity(intentKitchen);
+
                 break;
 
             case R.id.house:
                 Intent intentHouse= new Intent(StartActivity.this, HouseActivity.class);
-              //  startActivity(intentHouse);
-                startActivityForResult(intentHouse, 5);
+
+
+                startActivity(intentHouse);
+
                 break;
 
             case R.id.auto:
                 Intent intentAuto= new Intent(StartActivity.this, AutoActivity.class);
-              //  startActivity(intentAuto);
-                startActivityForResult(intentAuto, 5);
+
+
+                startActivity(intentAuto);
+
                 break;
 
         //    case R.id.about:
