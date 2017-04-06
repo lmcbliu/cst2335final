@@ -26,10 +26,12 @@ public class KitchenActivity extends AppCompatActivity {
     protected String[] kitchenItems =new String[]{"MicroWave","Samsung Fridge","Main Ceiling Light"};
     protected Button returnButton;
     protected boolean isTablet;
+
     protected Cursor results;
     protected KitchenDatabaseHelper dbHelper;
     protected SQLiteDatabase db;
     protected Context ctx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
