@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/autofmtvwelcome"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:text="@string/fmwelcome"
@@ -20,35 +20,35 @@
     <ListView
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:id="@+id/autoFMListview"
+        android:id="@+id/autofmlistview"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/autofmfrtuneseekBar"
-        android:layout_below="@+id/textView2" />
+        android:layout_below="@+id/autofmtvwelcome"
+        android:layout_above="@+id/autofmtv4" />
 
 
     <SeekBar
-        android:id="@+id/autofmfrtuneseekBar"
+        android:id="@+id/autofmtuneseekBar"
         android:layout_width="wrap_content"
         android:layout_height="10dp"
-        android:layout_above="@+id/switch2"
+        android:layout_above="@+id/autofmswitch1"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:id="@+id/autotextViewVolumcontrol"
+        android:id="@+id/autofmtvtunecontr"
         android:layout_width="wrap_content"
         android:layout_height="15dp"
-        android:text="TextView"
+        android:text="@string/fmfrtunecontr"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/switch2"
-        android:layout_alignTop="@+id/switch2"
+        android:layout_toStartOf="@+id/autfmswitch1"
+        android:layout_alignTop="@+id/autfmswitch1"
         android:layout_above="@+id/autoSeekBarFMFr" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/autofmswitch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Switch"
+        android:text="@string/mute"
         android:layout_above="@+id/autoSeekBarFMFr"
         android:layout_alignParentEnd="true"
        />
@@ -85,12 +85,21 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toEndOf="@+id/autolistview"
-        android:layout_above="@+id/autofmfrtuneseekBar"
-        android:layout_alignTop="@+id/autolistview"
-        android:id="@+id/autoFMFramLayout">
+        android:layout_toEndOf="@+id/autofmlistview"
+        android:layout_alignTop="@+id/autofmlistview"
+        android:id="@+id/autoFMFramLayout"
+        android:layout_alignBottom="@+id/autofmlistview">
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/autofmtv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/autofmtuneseekBar"
+        android:layout_alignParentStart="true"
+        android:text="@string/autofmvolumcontr"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

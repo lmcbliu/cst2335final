@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,9 +34,7 @@ public class AutoFMActivity extends AppCompatActivity {
     EditText fmChannelDesc;
     Button btnAutoSetChannel;
     ArrayList< String> autoChannelArrayList;
-
     Cursor autoChannelCursor;
-
     FrameLayout autoFrameLayout;
     boolean isAutoTablet;
     SQLiteDatabase autoChannelDB;
@@ -48,7 +47,7 @@ public class AutoFMActivity extends AppCompatActivity {
     FragmentManager fm;
     EditText channelName;
     //HashMap<String , String> hash;
-
+    SeekBar autofFMTuneseekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,28 +63,17 @@ public class AutoFMActivity extends AppCompatActivity {
         refreshMessages();
 
         listView.setAdapter(autoFMChannelAdapter);
-
-
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-
                 Bundle bun = new Bundle();
                 bun.putLong("ID", l );//l is the database ID of selected item
                 String message = (String)(listView.getItemAtPosition(i));
-                //bun.putString("Message",);
-                // cursor = db.rawQuery("select KEY_MESSAGE,KEY_ID from Message", null);
-                //int posistion = (int)(long) l;
-                //cursor.moveToPosition(posistion);
-                //  String message = (String)cursor.getString(cursor.getColumnIndex("KEY_MESSAGE"));
 
                 bun.putString("Message",message);
                 bun.putBoolean("isTablet",isAutoTablet);
-
 
                 //step 2, if a tablet, insert fragment into FrameLayout, pass data
                 if(isAutoTablet) {
@@ -111,6 +99,30 @@ public class AutoFMActivity extends AppCompatActivity {
 
         isAutoTablet = (findViewById(R.id.autoFMFramLayout) != null); //find out if this is a phone or tablet
 
+        autofFMTuneseekBar = (SeekBar) findViewById(R.id.autofmtuneseekBar);
+        autofFMTuneseekBar.setProgress(880);
+        autofFMTuneseekBar.setMax(1080);
+
+        autofFMTuneseekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progress = progress / 10;
+                progress = progress * 10;
+               // autofFMTuneseekBar.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
 
     }
 
@@ -134,7 +146,6 @@ public class AutoFMActivity extends AppCompatActivity {
 
 
     private class AutoFMChannelAdapter extends ArrayAdapter<String> {
-
 
         public AutoFMChannelAdapter(Context ctx) {
             super(ctx, 0);
@@ -162,23 +173,8 @@ public class AutoFMActivity extends AppCompatActivity {
             displayChannelInfo = inflater.inflate(R.layout.display_fm_infor, null);
             TextView tv2 = (TextView) displayChannelInfo.findViewById(R.id.autodisochanlinfr);
             tv2.setText(getItem(position));
-            /*
-            if (position % 2 == 0) {
-                result = inflater.inflate(R.layout.chat_row_incoming, null);
-
-            } else
-
-                result = inflater.inflate(R.layout.chat_row_outgoing, null);
-
-            TextView tv2 = (TextView) result.findViewById(R.id.message_text);
-            tv2.setText(getItem(position));
-*/
 
             return displayChannelInfo;
-
         }
-
     }
-
-
 }
