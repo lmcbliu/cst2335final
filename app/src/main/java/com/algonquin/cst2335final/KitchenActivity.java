@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class KitchenActivity extends AppCompatActivity {
 
@@ -48,6 +50,7 @@ public class KitchenActivity extends AppCompatActivity {
                 kitchenProg.setVisibility(View.VISIBLE);
                 KitchenStatus kitchenStatus = new KitchenStatus();
                 kitchenStatus.execute();
+                Snackbar.make(v,"INFORMATION SAVING",Snackbar.LENGTH_LONG).setAction("Action",null).show();
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -180,6 +183,8 @@ public class KitchenActivity extends AppCompatActivity {
 
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.KitchenRefProgress);
             progressBar.setVisibility(View.INVISIBLE);
+            Toast toast = Toast.makeText(KitchenActivity.this, "INFROMATION SAVED SUCCESSFUL", Toast.LENGTH_LONG);
+            toast.show();
         }
     }
 }
