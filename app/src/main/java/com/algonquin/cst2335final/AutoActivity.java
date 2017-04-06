@@ -1,18 +1,29 @@
 package com.algonquin.cst2335final;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class AutoActivity extends AppCompatActivity {
+
+    protected ListView autoActivityListView;
+    protected String[] autoItems =new String[]{"Temperature","FM Radio","Google Navigation","Auto Light"};
+    protected Button autoActivityReturnButton;
 
     protected static final String ACTIVITY_NAME = "AutoActivity";
 
@@ -21,68 +32,93 @@ public class AutoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auto);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.autotoolbar);
-  //      setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.autofab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+
+        autoActivityListView=(ListView)findViewById(R.id.autoactivitylistview);
+        autoActivityListView.setAdapter(new ArrayAdapter<String>(this, R.layout.kitchen_row, autoItems ));
+        autoActivityReturnButton=(Button)findViewById(R.id.autoAvtivityReturn);
+        autoActivityReturnButton.setOnClickListener(e->{
+            startActivityForResult(new Intent(this, StartActivity.class),5);
         });
-    }
+        Button setB=(Button)findViewById(R.id.autoSetting);
+        setB.setOnClickListener((v)->{
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(AutoActivity.this);
+            builder.setMessage(R.string.micro_dialog_message).setTitle(R.string.micro_dialog_title).setPositiveButton(R.string.micro_ok,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //USER CLICK OK
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("Response", "My information to share");
+                            setResult(Activity.RESULT_OK, resultIntent);
+                            finish();
 
-    public boolean onCreateOptionsMenu (Menu m){
+                        }
+                    }).setNegativeButton(R.string.micro_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //user click cancel
 
-        getMenuInflater().inflate(R.menu.toolbar_auto, m );
-        return true;
-
-    }
-
-    public boolean onOptionsItemSelected(MenuItem mi){
-
-        int id =mi.getItemId();
-
-        switch( id ){
-
-            case R.id.autotemperature:
-                Intent intentLivingRoom = new Intent(AutoActivity.this, AutoTempActivity.class);
-                startActivityForResult(intentLivingRoom, 5);
-                break;
-
-            case R.id.autoradio:
-                Intent intentKitchen = new Intent(AutoActivity.this, KitchenActivity.class);
-                startActivityForResult(intentKitchen, 5);
-                break;
-
-            case R.id.autogps:
-               /* Intent intentHouse= new Intent(AutoActivity.this, AutoGoogleMap.class);
-                startActivityForResult(intentHouse, 5);
-
-                */
-                Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(mapIntent);
                 }
-                break;
+            }).show();
+        });
+        autoActivityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            case R.id.autolight:
-                Intent intentAuto= new Intent(AutoActivity.this, KitchenActivity.class);
-                startActivityForResult(intentAuto, 5);
-                break;
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            case R.id.autohelp:
+                switch(position)
+                {
 
-                Toast.makeText(this, "CST2355 Final Project Automobile part by Bo Liu", Toast.LENGTH_LONG).show();
-                break;
-        }
+                    case 0:
+                        startActivityForResult(new Intent(AutoActivity.this, AutoTempActivity.class),5);
+                        break;
+                    case 1:
+                        //Start the Screen_Two activity, with 10 as the result code
 
-        return true;
+                        startActivityForResult(new Intent(AutoActivity.this, AutoFMActivity.class),5);
+                        break;
+                    case 2: //light
+
+                        TrackGPS gps = new TrackGPS(AutoActivity.this);
+                        double longitude=75.6972;
+                        double latitude=45.4215;
+                        if(gps.canGetLocation()){
+
+                            longitude = gps.getLongitude();
+                            latitude = gps .getLatitude();
+
+                            Toast.makeText(getApplicationContext(),"Longitude:"+Double.toString(longitude)+"\nLatitude:"+Double.toString(latitude),Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+
+                            gps.showSettingsAlert();
+                        }
+
+
+                        // Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
+                        Uri gmmIntentUri = Uri.parse("geo:"+latitude+","+longitude);
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(mapIntent);
+                        }
+                        break;
+
+                    case 3: //light
+                        startActivityForResult(new Intent(AutoActivity.this, AutoLight.class ), 5);
+                        break;
+
+
+                }
+            }
+
+
+        });
+
     }
+
 
 }
