@@ -63,7 +63,7 @@ public class AutoFMFragment extends Fragment {
                else{
                    //cw.deleteDbMessage(id);
 
-                   aFMa.removeFrag(AutoFMFragment.this);
+                   aFMa.removeFrag();
                }
            }
        });
