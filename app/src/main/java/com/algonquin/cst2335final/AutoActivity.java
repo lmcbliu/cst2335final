@@ -1,12 +1,9 @@
 package com.algonquin.cst2335final;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -40,29 +37,7 @@ public class AutoActivity extends AppCompatActivity {
         autoActivityReturnButton.setOnClickListener(e->{
             startActivityForResult(new Intent(this, StartActivity.class),5);
         });
-        Button setB=(Button)findViewById(R.id.autoSetting);
-        setB.setOnClickListener((v)->{
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(AutoActivity.this);
-            builder.setMessage(R.string.micro_dialog_message).setTitle(R.string.micro_dialog_title).setPositiveButton(R.string.micro_ok,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //USER CLICK OK
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra("Response", "My information to share");
-                            setResult(Activity.RESULT_OK, resultIntent);
-                            finish();
-
-                        }
-                    }).setNegativeButton(R.string.micro_cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //user click cancel
-
-                }
-            }).show();
-        });
         autoActivityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

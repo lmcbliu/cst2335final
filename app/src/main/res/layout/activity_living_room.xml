@@ -26,11 +26,14 @@
 
     <ProgressBar
         android:id="@+id/livingProgressBar"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
+
+
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/livingroomcustombt"
-        android:visibility="invisible"/>
+        android:layout_above="@+id/livingroomcustombt" />
+
+
 
     <Button
         android:id="@+id/livingroomcustombt"

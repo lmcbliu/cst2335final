@@ -19,6 +19,7 @@ import java.security.ProtectionDomain;
 
 public class FridgeActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,5 +28,6 @@ public class FridgeActivity extends AppCompatActivity {
         Bundle bun = getIntent().getExtras();
         frag.setArguments( bun );
         getFragmentManager().beginTransaction().add(R.id.kitchenfragmentHolder,frag).commit();
+
     }
 }
