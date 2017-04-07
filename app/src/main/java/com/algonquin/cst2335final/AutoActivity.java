@@ -40,6 +40,7 @@ public class AutoActivity extends AppCompatActivity {
         autoActivityReturnButton.setOnClickListener(e->{
             startActivityForResult(new Intent(this, StartActivity.class),5);
         });
+
         Button setB=(Button)findViewById(R.id.autoSetting);
         setB.setOnClickListener((v)->{
 
@@ -63,6 +64,63 @@ public class AutoActivity extends AppCompatActivity {
                 }
             }).show();
         });
+        autoActivityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                switch(position)
+                {
+
+                    case 0:
+                        startActivityForResult(new Intent(AutoActivity.this, AutoTempActivity.class),5);
+                        break;
+                    case 1:
+                        //Start the Screen_Two activity, with 10 as the result code
+
+                        startActivityForResult(new Intent(AutoActivity.this, AutoFMActivity.class),5);
+                        break;
+                    case 2: //light
+
+                        TrackGPS gps = new TrackGPS(AutoActivity.this);
+                        double longitude=75.6972;
+                        double latitude=45.4215;
+                        if(gps.canGetLocation()){
+
+                            longitude = gps.getLongitude();
+                            latitude = gps .getLatitude();
+
+                            Toast.makeText(getApplicationContext(),"Longitude:"+Double.toString(longitude)+"\nLatitude:"+Double.toString(latitude),Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+
+                            gps.showSettingsAlert();
+                        }
+
+
+                        // Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
+                        Uri gmmIntentUri = Uri.parse("geo:"+latitude+","+longitude);
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(mapIntent);
+                        }
+                        break;
+
+                    case 3: //light
+                        startActivityForResult(new Intent(AutoActivity.this, AutoLight.class ), 5);
+                        break;
+
+
+                }
+            }
+
+
+        });
+
+
+
         autoActivityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
