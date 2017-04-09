@@ -16,4 +16,11 @@
     <string name="living_lamp2logout">返回</string>
     <string name="living_deletemessage">删除</string>
     <string name="living_roomcustombt">自选</string>
+    <string name="living_checkboxm1">灯1</string>
+    <string name="living_checkboxm2">灯2</string>
+    <string name="living_checkboxm3">灯3</string>
+    <string name="living_checkboxtv">电视</string>
+    <string name="living_checkboxblinds">窗帘</string>
+    <string name="living_confirmbt">确认</string>
+
 </resources>
