@@ -175,7 +175,7 @@ public class KitchenFragment extends Fragment  {
         SharedPreferences sharedPreferences1=getActivity().getSharedPreferences("FridgeTemp",Context.MODE_PRIVATE);
         textOfFridge.setText("Fridge Temp is "+sharedPreferences1.getString("FridgeTemp","")+" °C");
         setFreezerB.setOnClickListener(new View.OnClickListener(){
-
+        //SET THE ACTION OF BUTTON
             @Override
             public void onClick(View view){
                 String temp=editFreezer.getText().toString();
