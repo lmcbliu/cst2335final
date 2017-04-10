@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.support.design.widget.Snackbar;
@@ -92,11 +93,11 @@ public class KitchenFragment extends Fragment  {
         lightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-               SharedPreferences prefProgress =getActivity().getSharedPreferences("Kichenlight",Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=prefProgress.edit();
-                proCount=progress;
-                editor.putInt("lightprogress",progress);
-                editor.commit();
+//               SharedPreferences prefProgress =getActivity().getSharedPreferences("Kichenlight",Context.MODE_PRIVATE);
+//                SharedPreferences.Editor editor=prefProgress.edit();
+//                proCount=progress;
+//                editor.putInt("lightprogress",progress);
+//                editor.commit();
             }
 
             @Override
@@ -111,18 +112,18 @@ public class KitchenFragment extends Fragment  {
         });
         aSwitch=(Switch)view.findViewById(R.id.switchkitchenlight);
         image=(ImageButton) view.findViewById(R.id.imagekitchenlight);
-        SharedPreferences prefs=getActivity().getSharedPreferences("KitchenLight",Context.MODE_PRIVATE);
-        lightSeekBar.setProgress(prefs.getInt("lightprogress",proCount));
+       // SharedPreferences prefs=getActivity().getSharedPreferences("KitchenLight",Context.MODE_PRIVATE);
+       // lightSeekBar.setProgress(prefs.getInt("lightprogress",proCount));
 
-        if(prefs.getString("Light","").compareTo("on")==0){
-            aSwitch.setChecked(true);
-            image.setImageResource(R.drawable.kitchenon);
-
-        }
-            else{aSwitch.setChecked(false);
-            image.setImageResource(R.drawable.kitchenoff);
-            lightSeekBar.setEnabled(false);
-                                    }
+//        if(prefs.getString("Light","").compareTo("on")==0){
+//            aSwitch.setChecked(true);
+//            image.setImageResource(R.drawable.kitchenon);
+//
+//        }
+//            else{aSwitch.setChecked(false);
+//            image.setImageResource(R.drawable.kitchenoff);
+//            lightSeekBar.setEnabled(false);
+//                                    }
        aSwitch.setSelected(true);
 
         aSwitch.setOnCheckedChangeListener(
