@@ -28,10 +28,16 @@
         android:layout_height="wrap_content"
         android:text="Return to Home Page"/>
     <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/kitchenhelp"
+        android:text="HELP"/>
+    <Button
         android:id="@+id/kitchenSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="REFRESH"/>
+
     <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

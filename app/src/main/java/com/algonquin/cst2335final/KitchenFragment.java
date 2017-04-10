@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ public class KitchenFragment extends Fragment  {
     protected ProgressBar progressBar;
     protected int progressStatus;
     Handler handler=new Handler();
+    protected static int proCount=0;
 
     public KitchenFragment(){}
     public KitchenFragment( KitchenActivity kitchenActivity){this.kitchenActivity=kitchenActivity;}
@@ -84,15 +86,43 @@ public class KitchenFragment extends Fragment  {
 
     private void lightAction(View view) {
 
+
+        SeekBar lightSeekBar= (SeekBar)view.findViewById(R.id.kitchenLightProgress) ;
+
+        lightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+               SharedPreferences prefProgress =getActivity().getSharedPreferences("Kichenlight",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=prefProgress.edit();
+                proCount=progress;
+                editor.putInt("lightprogress",progress);
+                editor.commit();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         aSwitch=(Switch)view.findViewById(R.id.switchkitchenlight);
         image=(ImageButton) view.findViewById(R.id.imagekitchenlight);
         SharedPreferences prefs=getActivity().getSharedPreferences("KitchenLight",Context.MODE_PRIVATE);
+        lightSeekBar.setProgress(prefs.getInt("lightprogress",proCount));
+
         if(prefs.getString("Light","").compareTo("on")==0){
             aSwitch.setChecked(true);
             image.setImageResource(R.drawable.kitchenon);
+
         }
             else{aSwitch.setChecked(false);
-            image.setImageResource(R.drawable.kitchenoff);}
+            image.setImageResource(R.drawable.kitchenoff);
+            lightSeekBar.setEnabled(false);
+                                    }
        aSwitch.setSelected(true);
 
         aSwitch.setOnCheckedChangeListener(
@@ -111,13 +141,16 @@ public class KitchenFragment extends Fragment  {
                             text = "Light is On";
                             duration = Toast.LENGTH_SHORT;
                             image.setImageResource(R.drawable.kitchenon);
+                            lightSeekBar.setEnabled(true);
+                            lightSeekBar.setProgress(proCount);
                         } else {
                             editor.putString("Light","off");
                             editor.commit();
                             text = "Light is OFF";
                             duration = Toast.LENGTH_LONG;
                             image.setImageResource(R.drawable.kitchenoff);
-
+                            lightSeekBar.setEnabled(false);
+                            lightSeekBar.setProgress(0);
                         }
                         Toast toast = Toast.makeText(view.getContext(), text, duration);
                         toast.show();
@@ -127,6 +160,7 @@ public class KitchenFragment extends Fragment  {
     }
 
     private void fridgeAction(View gui){
+
         textOfFridge=(TextView)gui.findViewById(R.id.fridgetextview);
         textOfFreezer=(TextView)gui.findViewById(R.id.freezertextView);
         editFridge=(EditText)gui.findViewById(R.id.editTextfridge);
@@ -184,12 +218,16 @@ public class KitchenFragment extends Fragment  {
                     }catch(InterruptedException e){
                         e.printStackTrace();
                     }
-
+                    if(progressStatus>90){
+                        Intent resultIntent=new Intent();
+                        getActivity().setResult(Activity.RESULT_OK,resultIntent);
+                        getActivity().finish();}
                 }
             }).start();
             Snackbar.make(gui,"TEMPERATURE SAVED SUCCESSFUL",Snackbar.LENGTH_LONG).setAction("Action",null).show();
 
         });
+
     }
     private void microwaveAction(View view) {
         inputTime=(EditText)view.findViewById(R.id.editTime);

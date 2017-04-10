@@ -1,7 +1,9 @@
 package com.algonquin.cst2335final;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +46,8 @@ public class KitchenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kitchen);
+        Button helpB= (Button)findViewById(R.id.kitchenhelp);
+
         isTablet = (findViewById(R.id.kitchenfragmentHolder) != null);
         listView = (ListView) findViewById(R.id.theList);
         listView.setAdapter(new ArrayAdapter<>(this, R.layout.kitchen_row, kitchenItems));
@@ -52,6 +57,22 @@ public class KitchenActivity extends AppCompatActivity {
         });
         ctx = this;
         Button bSet = (Button) findViewById(R.id.kitchenSetting);
+        helpB.setOnClickListener((v)->{
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+            builder.setMessage(R.string.kichenhelp_dialog_message).setTitle(R.string.kichenhelp_title).setPositiveButton(R.string.micro_ok,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //USER CLICK OK
+//                            Intent resultIntent = new Intent();
+//                            resultIntent.putExtra("Response", "My information to share");
+//                            setResult(Activity.RESULT_OK, resultIntent);
+//                            finish();
+
+                        }
+                    }).show();
+
+        });
         bSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +99,7 @@ public class KitchenActivity extends AppCompatActivity {
                             //Start the Screen_Two activity, with 10 as the result code
                             Intent intentFridge=new Intent(KitchenActivity.this, FridgeActivity.class);
                             intentFridge.putExtra("ID",id);
-                            startActivityForResult(intentFridge, 5);
+                            startActivity(intentFridge);
                             break;
                         case 2: //light
                             Intent intentLight=new Intent(KitchenActivity.this, KitchenLightActivity.class);
@@ -96,6 +117,7 @@ public class KitchenActivity extends AppCompatActivity {
                 }
             }
         });
+
         final SharedPreferences prefs = getSharedPreferences("livingroomFile", Context.MODE_PRIVATE);
         //Read the number of times run in the file:
         int ifirstrun = prefs.getInt("LivingRoomFirstRun", 0);

@@ -71,7 +71,11 @@
     <string name="living_deletemessage">Delete This Item</string>
     <string name="living_roomcustombt">Customization CheckBox</string>
     <string name="living_refreshbt">Refresh Status</string>
-
+    <string name="kichenhelp_title">Kitchen Help Information</string>
+    <string name="kichenhelp_dialog_message">Author:Tao Wang \n Version:1.0 \n Information: \n -click the items on the list, you will
+    enter into the page of the item \n -click on return button to back to home page \n click on refresh button to save all information \n
+        click add and delete button to add or delete items
+    </string>
 
 
 </resources>
