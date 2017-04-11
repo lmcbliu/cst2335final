@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_microwave"
     android:layout_width="match_parent"
@@ -39,15 +40,6 @@
         android:layout_alignStart="@+id/editTime"
         android:id="@+id/buttonMicStart" />
 
-    <ToggleButton
-        android:text="STOP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonMicStop"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/buttonMicStart"
-        android:layout_alignStart="@+id/buttonMicStart" />
-
     <Button
         android:text="Cancel"
         android:layout_width="wrap_content"
@@ -77,6 +69,22 @@
         android:layout_marginTop="14dp"
         android:id="@+id/buttonMicexit" />
 
+    <ToggleButton
+        android:text="STOP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonMicStop"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/buttonMicStart"
+        android:layout_alignStart="@+id/buttonMicStart" />
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/microwaveoff"
+        android:id="@+id/imageOfmicrowave"
+        android:layout_alignBottom="@+id/buttonMicexit"
+        android:layout_toEndOf="@+id/textViewofMicro" />
 
 
 </RelativeLayout>

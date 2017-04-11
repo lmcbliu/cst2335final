@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -58,7 +59,7 @@ public class KitchenFragment extends Fragment  {
     protected ProgressBar progressBar;
     protected int progressStatus;
     Handler handler=new Handler();
-    protected static int proCount=0;
+
 
     public KitchenFragment(){}
     public KitchenFragment( KitchenActivity kitchenActivity){this.kitchenActivity=kitchenActivity;}
@@ -87,17 +88,17 @@ public class KitchenFragment extends Fragment  {
 
     private void lightAction(View view) {
 
-
+        Button backB=(Button)view.findViewById(R.id.KitchenLightBack);
+        backB.setOnClickListener((v)->{
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
+        });
         SeekBar lightSeekBar= (SeekBar)view.findViewById(R.id.kitchenLightProgress) ;
 
         lightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//               SharedPreferences prefProgress =getActivity().getSharedPreferences("Kichenlight",Context.MODE_PRIVATE);
-//                SharedPreferences.Editor editor=prefProgress.edit();
-//                proCount=progress;
-//                editor.putInt("lightprogress",progress);
-//                editor.commit();
+
             }
 
             @Override
@@ -112,18 +113,7 @@ public class KitchenFragment extends Fragment  {
         });
         aSwitch=(Switch)view.findViewById(R.id.switchkitchenlight);
         image=(ImageButton) view.findViewById(R.id.imagekitchenlight);
-       // SharedPreferences prefs=getActivity().getSharedPreferences("KitchenLight",Context.MODE_PRIVATE);
-       // lightSeekBar.setProgress(prefs.getInt("lightprogress",proCount));
 
-//        if(prefs.getString("Light","").compareTo("on")==0){
-//            aSwitch.setChecked(true);
-//            image.setImageResource(R.drawable.kitchenon);
-//
-//        }
-//            else{aSwitch.setChecked(false);
-//            image.setImageResource(R.drawable.kitchenoff);
-//            lightSeekBar.setEnabled(false);
-//                                    }
        aSwitch.setSelected(true);
 
         aSwitch.setOnCheckedChangeListener(
@@ -131,27 +121,22 @@ public class KitchenFragment extends Fragment  {
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        SharedPreferences preferences=getActivity().getSharedPreferences("KitchenLight",Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor=preferences.edit();
+
 
                         CharSequence text;
                         int duration;
                         if (aSwitch.isChecked()) {
-                            editor.putString("Light","on");
-                            editor.commit();
+
                             text = "Light is On";
                             duration = Toast.LENGTH_SHORT;
                             image.setImageResource(R.drawable.kitchenon);
-                            lightSeekBar.setEnabled(true);
-                            lightSeekBar.setProgress(proCount);
+
                         } else {
-                            editor.putString("Light","off");
-                            editor.commit();
+
                             text = "Light is OFF";
                             duration = Toast.LENGTH_LONG;
                             image.setImageResource(R.drawable.kitchenoff);
-                            lightSeekBar.setEnabled(false);
-                            lightSeekBar.setProgress(0);
+
                         }
                         Toast toast = Toast.makeText(view.getContext(), text, duration);
                         toast.show();
@@ -171,20 +156,14 @@ public class KitchenFragment extends Fragment  {
         saveButton=(Button)gui.findViewById(R.id.buttonSave);
         progressBar=(ProgressBar)gui.findViewById(R.id.fridgeprogressbar);
 
-        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("FreezerTemp",Context.MODE_PRIVATE);
-        textOfFreezer.setText("Freezer Temp is "+sharedPreferences.getString("FreezerTemp","")+" °C");
-        SharedPreferences sharedPreferences1=getActivity().getSharedPreferences("FridgeTemp",Context.MODE_PRIVATE);
-        textOfFridge.setText("Fridge Temp is "+sharedPreferences1.getString("FridgeTemp","")+" °C");
+
         setFreezerB.setOnClickListener(new View.OnClickListener(){
         //SET THE ACTION OF BUTTON
             @Override
             public void onClick(View view){
                 String temp=editFreezer.getText().toString();
                 textOfFreezer.setText("Freezer Temp is "+temp+" °C");
-                SharedPreferences preferences=getActivity().getSharedPreferences("FreezerTemp",Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=preferences.edit();
-                editor.putString("FreezerTemp",editFreezer.getText().toString());
-                editor.commit();
+
             }
 
         });
@@ -195,10 +174,7 @@ public class KitchenFragment extends Fragment  {
             public void onClick(View view){
                 String temp=editFridge.getText().toString();
                 textOfFridge.setText("Fridge Temp is "+temp+" °C");
-                SharedPreferences preferences=getActivity().getSharedPreferences("FridgeTemp",Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=preferences.edit();
-                editor.putString("FridgeTemp",editFridge.getText().toString());
-                editor.commit();
+
             }
 
         });
@@ -231,6 +207,7 @@ public class KitchenFragment extends Fragment  {
 
     }
     private void microwaveAction(View view) {
+        ImageView imgOfMic=(ImageView)view.findViewById(R.id.imageOfmicrowave);
         inputTime=(EditText)view.findViewById(R.id.editTime);
         start=(Button)view.findViewById(R.id.buttonMicStart);
         stop=(ToggleButton)view.findViewById(R.id.buttonMicStop);
@@ -242,6 +219,7 @@ public class KitchenFragment extends Fragment  {
         stop.setEnabled(false);
         //start button listener
         start.setOnClickListener((v)->{
+            imgOfMic.setImageResource(R.drawable.microwaveon);
             start.setEnabled(false);
             cancel.setEnabled(true);
             stop.setEnabled(true);
@@ -254,6 +232,7 @@ public class KitchenFragment extends Fragment  {
                 @Override
                 public void onFinish(){
                     show.setText("Time up");
+                    imgOfMic.setImageResource(R.drawable.microwaveoff);
 //                     Vibrator vibrator=(Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 //                     vibrator.vibrate(500);
 //                     vibrator.cancel();
@@ -300,6 +279,7 @@ public class KitchenFragment extends Fragment  {
         });
         //cancel button listener
         cancel.setOnClickListener((v)->{
+            imgOfMic.setImageResource(R.drawable.microwaveoff);
             isCancel=true;
             show.setText("0");
             start.setEnabled(true);
