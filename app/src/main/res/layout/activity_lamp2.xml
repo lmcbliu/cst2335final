@@ -11,7 +11,9 @@
         android:id="@+id/lamp2dim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/living_lamp2dim" />
+        android:text="@string/living_lamp2dim"
+        android:textColor="@android:color/holo_orange_light"
+        android:textSize="25dp" />
 
     <SeekBar
         android:id="@+id/lamp2seekBar"
@@ -20,7 +22,8 @@
 
     <Button
         android:id="@+id/lamp2logout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_light"
         android:text="@string/living_lamp2logout" />
 </LinearLayout>

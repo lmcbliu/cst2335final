@@ -16,7 +16,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+/**
+ * This class support user to add or delete items by using dropbox, displaying choice, confirming actions
+ */
 public class LivingCustomizingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Spinner lvSpinner;
     private int itempos;
@@ -47,7 +51,6 @@ public class LivingCustomizingActivity extends AppCompatActivity implements Adap
             }
         });
 
-
         // user click change confirm button, system pops out dialog for confirming user's choice
         Button itemChange = (Button) findViewById(R.id.livingchangebutton);
         itemChange.setOnClickListener(new View.OnClickListener(){
@@ -61,7 +64,7 @@ public class LivingCustomizingActivity extends AppCompatActivity implements Adap
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.i("Add", "Add");
-                                EditText inputMessage = (EditText) v.findViewById(R.id.livingcustomtext);
+                                TextView inputMessage = (TextView) v.findViewById(R.id.livingcustomtext);
                                 Intent dataBack = new Intent();
                                 dataBack.putExtra("ItemSelected", itempos);
                                 dataBack.putExtra("AddOrDel", 1);
@@ -86,7 +89,7 @@ public class LivingCustomizingActivity extends AppCompatActivity implements Adap
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.i("Cancel", "Cancel");
-                                EditText inputMessage = (EditText) v.findViewById(R.id.livingcustomtext);
+                                TextView inputMessage = (TextView) v.findViewById(R.id.livingcustomtext);
 
                             }
                         });
@@ -94,7 +97,6 @@ public class LivingCustomizingActivity extends AppCompatActivity implements Adap
                 customBuild.create().show();
             }
         });
-
 
     }
 
