@@ -61,12 +61,12 @@ public class KitchenActivity extends AppCompatActivity {
         prefs=getSharedPreferences("listview",Context.MODE_PRIVATE);
         set=prefs.getStringSet("key",new HashSet<String>());
         Log.i("set value",set.toString());
-        if(set.isEmpty()){
-            set.add(getString(R.string.defaultmicrowave));
-            set.add(getString(R.string.defaultfridge));
-            set.add(getString(R.string.defaultfreezer));
-            set.add(getString(R.string.defaultkitchenlight));
-        }
+//        if(set.isEmpty()){
+//            set.add(getString(R.string.defaultmicrowave));
+//            set.add(getString(R.string.defaultfridge));
+//            set.add(getString(R.string.defaultfreezer));
+//            set.add(getString(R.string.defaultkitchenlight));
+//        }
         nameList= new ArrayList<>(set);
 
         ctx = this;
@@ -76,7 +76,7 @@ public class KitchenActivity extends AppCompatActivity {
         buttonAdd.setOnClickListener((view)->{
             Log.i("kitchen","additem");
             String [] itemselect=new String[]{getString(R.string.defaultfreezer),
-                    getString(R.string.defaultfridge),getString(R.string.defaultmicrowave),getString(R.string.defaultmicrowave)};
+                    getString(R.string.defaultfridge),getString(R.string.defaultmicrowave),getString(R.string.defaultkitchenlight)};
            //ask user which item will be added.
             AlertDialog.Builder builder=new AlertDialog.Builder(ctx);
             LayoutInflater inflater = getLayoutInflater();
