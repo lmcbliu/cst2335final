@@ -70,7 +70,7 @@
     <string name="living_confirmbt">Confirm Your Choice</string>
     <string name="living_tvchannel">Choose TV Channel</string>
     <string name="living_helpinfo">Help Info</string>
-    <string name="living_helpcontent">The LivingRoomActivity, Version 1.0, is written by Min Luo. \nThis activity provides three lamps, one tv, and one blinds for users to control.\nUsers could enter different control pages by clicking each item, changes the status, and click confirm buttons to return back to the main page of LivingRoom. Refresh button is used to get updated status. \n When clicking customizing button, users can add and delete items as you like.</string>
+    <string name="living_helpcontent">\t\tThe LivingRoomActivity, Version 1.0, is written by Min Luo. \n\t\tThis activity provides three lamps, one tv, and one blinds for users to control.\n\tUsers could enter different control pages by clicking each item, changes the status, and click confirm buttons to return back to the main page of LivingRoom. Refresh button is used to get updated status. \n\t\tWhen clicking customizing button, users can add and delete items as you like.</string>
 
 
     <string name="micro_dialog_title">Exit</string>

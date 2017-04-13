@@ -1,5 +1,7 @@
 package com.algonquin.cst2335final;
-
+/**
+ * Created By Min Luo, April.12, 2017
+ */
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,8 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -19,21 +19,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import java.io.File;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 
+/**
+ * This class support storing and displaying items status. User can add or delete items as they like.
+ */
 public class LivingRoomActivity extends AppCompatActivity {
 
     private Context ctx;
     private ListView livingroomlist;
-    private String[] livingitems = {"Lamp On/Off", "Lamp Dimmable", "Lamp Colorful", "TV", "Window Blinds"};
-    private String[] listitems = {"", "", "", "", ""};
-    private int[] dynamicitems={0,0,0,0,0};
+    private ArrayList<String> livingitems = new ArrayList<>();  // store default items astatus
+    private ArrayList<String> listitems = new ArrayList<>();  // store information displayed in ListView
+    private ArrayList<Integer> dynamicitems=new ArrayList<>();  // store dynamic change of items, a mirror to displayed listview
     private int itemscounter;
     protected Boolean isTablet;
     private int myLamp2Progress, myLamp3Progress, myLamp3Color, myTVChannel,myBlindsHeight;
@@ -61,6 +61,7 @@ public class LivingRoomActivity extends AppCompatActivity {
             }
         });
 
+        // user click help button to get introduction information of this applicatioin
         Button btintro = (Button)findViewById(R.id.livinghelpbutton);
         btintro.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -69,7 +70,7 @@ public class LivingRoomActivity extends AppCompatActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 final View view = inflater.inflate(R.layout.activity_living_help, null);
                 livingIntro.setView(inflater.inflate(R.layout.activity_living_tv_dialog, null))
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener(){ // click ok to return
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.i("OK", "OK");
@@ -86,7 +87,7 @@ public class LivingRoomActivity extends AppCompatActivity {
         final SharedPreferences prefs = getSharedPreferences("livingroomFile", Context.MODE_PRIVATE);
         //Read the number of times run in the file:
         int ifirstrun = prefs.getInt("LivingRoomFirstRun", 0);
-        if (ifirstrun <= 1){ // whether the database is run on first time
+        if (ifirstrun <= 1){ //if the database is run on first time, set default value for database
 
             livingDataHelper = new LivingRoomDatabaseHelper(ctx);
             db = livingDataHelper.getReadableDatabase();
@@ -123,15 +124,17 @@ public class LivingRoomActivity extends AppCompatActivity {
             newValues6.put(livingDataHelper.LIVINGITEM_VALUE, "10");
             db.insert(livingDataHelper.TABLE_NAME, null, newValues6);
 
-            // place the order of item
-            dynamicitems[0] = 0;
-            dynamicitems[1] = 1;
-            dynamicitems[2] = 2;
-            dynamicitems[3] = 3;
-            dynamicitems[4] = 4;
-            itemscounter = dynamicitems.length;
-            //
-            // when initialization, the counter is recorded into database
+            // add the items order in ArrayList
+            dynamicitems.add(0,0);
+            dynamicitems.add(1,1);
+            dynamicitems.add(2,2);
+            dynamicitems.add(3,3);
+            dynamicitems.add(4,4);
+
+            // save ArrayList size as item number
+            itemscounter = dynamicitems.size();
+
+            // when initialization, the counter and each item position is recorded into the same database
             ContentValues newValuesItemCounter = new ContentValues();
             newValuesItemCounter.put(livingDataHelper.LIVINGITEM_KEY,"itemscounter");
             newValuesItemCounter.put(livingDataHelper.LIVINGITEM_VALUE,itemscounter);
@@ -139,45 +142,42 @@ public class LivingRoomActivity extends AppCompatActivity {
 
             ContentValues newValuesItem0 = new ContentValues();
             newValuesItem0.put(livingDataHelper.LIVINGITEM_KEY,"items0");
-            newValuesItem0.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems[0]);
+            newValuesItem0.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems.get(0));
             db.insert(livingDataHelper.TABLE_NAME, null, newValuesItem0);
 
             ContentValues newValuesItem1 = new ContentValues();
             newValuesItem1.put(livingDataHelper.LIVINGITEM_KEY,"items1");
-            newValuesItem1.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems[1]);
+            newValuesItem1.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems.get(1));
             db.insert(livingDataHelper.TABLE_NAME, null, newValuesItem1);
 
             ContentValues newValuesItem2 = new ContentValues();
             newValuesItem2.put(livingDataHelper.LIVINGITEM_KEY,"items2");
-            newValuesItem2.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems[2]);
+            newValuesItem2.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems.get(2));
             db.insert(livingDataHelper.TABLE_NAME, null, newValuesItem2);
 
             ContentValues newValuesItem3 = new ContentValues();
             newValuesItem3.put(livingDataHelper.LIVINGITEM_KEY,"items3");
-            newValuesItem3.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems[3]);
+            newValuesItem3.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems.get(3));
             db.insert(livingDataHelper.TABLE_NAME, null, newValuesItem3);
 
             ContentValues newValuesItem4 = new ContentValues();
             newValuesItem4.put(livingDataHelper.LIVINGITEM_KEY,"items4");
-            newValuesItem4.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems[4]);
+            newValuesItem4.put(livingDataHelper.LIVINGITEM_VALUE,dynamicitems.get(4));
             db.insert(livingDataHelper.TABLE_NAME, null, newValuesItem4);
      }
 
         //Open a file for storing shared preferences:
-        //final SharedPreferences prefs =  getSharedPreferences("livingroomFile", Context.MODE_PRIVATE);
         //Get an editor object for writing to the file:
         SharedPreferences.Editor writer = prefs.edit();
-        writer.putInt("LivingRoomFirstRun", ++ifirstrun);
+        writer.putInt("LivingRoomFirstRun", ++ifirstrun);// use "LivingRoomFirstRun" file to store run times
         //Write the file:
         writer.commit();
-        // use getValue() method to retrieve counter
-        dynamicitems[0] = Integer.parseInt(getValue("items0"));
-        dynamicitems[1] = Integer.parseInt(getValue("items1"));
-        dynamicitems[2] = Integer.parseInt(getValue("items2"));
-        dynamicitems[3] = Integer.parseInt(getValue("items3"));
-        dynamicitems[4] = Integer.parseInt(getValue("items4"));
-
+        // use getValue() method to retrieve counter value
         itemscounter = Integer.parseInt(getValue("itemscounter"));
+        //add item numbers into ArrayList
+        for(int i=0;i<itemscounter;i++){
+            dynamicitems.add(i,Integer.parseInt(getValue("items"+i)));
+        }
 
         // By selecting Tablet or Phone display, the system choose ways to store default status
         isTablet = (findViewById(R.id.livingroomfragmentHolder)!=null); // boolean variable to tell if it's a tablet
@@ -186,18 +186,16 @@ public class LivingRoomActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 //covert pos to itempos
-                //adapter
-                int itempos = dynamicitems[position];
+                int itempos = dynamicitems.get(position);
 
-                if(!isTablet) {//phone
+                if(!isTablet) {//if user choose the phone
                     switch (itempos) {
                         case 0: //lamp1
                             Intent lamp1Intent = new Intent(LivingRoomActivity.this, LivingRoomMessageDetails.class);
-                            strLamp1Status = getValue("Lamp1Status");
                             lamp1Intent.putExtra("Lamp1Status",strLamp1Status);
                             lamp1Intent.putExtra("ItemID",0);
                             lamp1Intent.putExtra("IsTablet",0);
-                            startActivityForResult(lamp1Intent, 5); //go to view fragment details
+                            startActivityForResult(lamp1Intent, 5); //callback functions
                             break;
                         case 1: //lamp2
                             Intent lamp2intent = new Intent(LivingRoomActivity.this, LivingRoomMessageDetails.class);
@@ -229,10 +227,8 @@ public class LivingRoomActivity extends AppCompatActivity {
                             startActivityForResult(blindsActivity, 25);
                             break;
                     }
-                }else{// tablet
-                    //livingroomfrag = new LivingFragmentActivity(LivingRoomActivity.this);
-                    //    livingroomfrag.setArguments(bundle);
-                    switch (itempos) {
+                }else{// if application is run by the tablet
+                     switch (itempos) {
                         case 0: //lamp1
                             Lamp1Activity lamp1intent = new Lamp1Activity(LivingRoomActivity.this);
                             Bundle bundle = new Bundle();
@@ -243,7 +239,6 @@ public class LivingRoomActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction().replace(R.id.livingroomfragmentHolder, lamp1intent).commit();
                             break;
                         case 1://lamp2
-
                             Lamp2Activity lamp2intent = new Lamp2Activity(LivingRoomActivity.this);
                             bundle = new Bundle();
                             bundle.putInt("Lamp2Progress", myLamp2Progress);
@@ -252,9 +247,7 @@ public class LivingRoomActivity extends AppCompatActivity {
                             lamp2intent.setArguments(bundle);
                             getSupportFragmentManager().beginTransaction().replace(R.id.livingroomfragmentHolder, lamp2intent).commit();
                             break;
-
                         case 2://lamp3
-
                             Lamp3Activity lamp3intent = new Lamp3Activity(LivingRoomActivity.this);
                             bundle = new Bundle();
                             bundle.putInt("Lamp3Progress", myLamp3Progress);
@@ -287,7 +280,7 @@ public class LivingRoomActivity extends AppCompatActivity {
                 }
             }
         });
-
+        // use self-defined getValue() method to read data from database
         strLamp1Status = getValue("Lamp1Status");
         myLamp2Progress = Integer.parseInt(getValue("Lamp2Progress"));
         myLamp3Progress = Integer.parseInt(getValue("Lamp3Progress"));
@@ -295,37 +288,42 @@ public class LivingRoomActivity extends AppCompatActivity {
         myTVChannel = Integer.parseInt(getValue("TVChannel"));
         myBlindsHeight = Integer.parseInt(getValue("BlindsHeight"));
 
-        livingitems[0] = "Lamp1 is " + strLamp1Status;
-        livingitems[1] = "Lamp2 is " + myLamp2Progress;
-        livingitems[2] = "Lamp3 is " + myLamp3Progress + " and color is " + myLamp3Color;
-        livingitems[3] = "TV is tuned to channel " + myTVChannel;
-        livingitems[4] = "Blinds is tuned to  " + myBlindsHeight + "  cm high";
+        // set values for different items and display
+        livingitems.add(0,"Lamp1 is " + strLamp1Status);
+        livingitems.add(1,"Lamp2 is " + myLamp2Progress + "luminance");
+        livingitems.add(2, "Lamp3 is " + myLamp3Progress + " luminance and color is " + myLamp3Color);
+        livingitems.add(3, "TV is tuned to channel " + myTVChannel);
+        livingitems.add(4, "Blinds is tuned to  " + myBlindsHeight + "  cm high");
 
+        // use self-defined method to display changed items layout
         displayList();
         Log.i("LivingRoomActivity", "OnCreate");
 
-        // pop out customer dialog
+        // pop out customer dialog to support user changing items
         Button btdialog = (Button) findViewById(R.id.livingroomcustombt);
         btdialog.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Intent customIntent = new Intent(LivingRoomActivity.this, LivingCustomizingActivity.class);
                 startActivityForResult(customIntent, 100); //go to view fragment details
-
             }
         });
 
     }
 
+    /**
+     * change items
+     */
     public void displayList(){
-        for(int i = 0; i<listitems.length; i++)
-            listitems[i]="";
+        listitems.clear();
+        for(int i = 0; i<itemscounter; i++)
+            listitems.add(i, "");
         for(int i = 0; i<itemscounter; i ++){
-            listitems[i]=livingitems[dynamicitems[i]];
+            listitems.set(i,livingitems.get(dynamicitems.get(i)));
         }
-
         livingroomlist.setAdapter(new ArrayAdapter<>(this, R.layout.living_row_layout, listitems ));
     }
+
     public void onStart(){
         super.onStart();
         Log.i("LivingRoomActivity", "onStart");
@@ -358,11 +356,11 @@ public class LivingRoomActivity extends AppCompatActivity {
     //This function gets called when another activity has finished and this activity is resuming:
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        // callback function to return values between different activities according to requestcode
         if(data != null)
         {
             String fromOtherActivity = data.getStringExtra("Status");
             Log.d("LivingRoomActivity", "Back from  other activity: " + fromOtherActivity);
-
 
             if(requestCode == 5 && resultCode == 0){
                 strLamp1Status = data.getStringExtra("Lamp1Status");
@@ -382,14 +380,12 @@ public class LivingRoomActivity extends AppCompatActivity {
 
                 // update database table
                 putValue("itemscounter",""+itemscounter);
-                putValue("items0",""+dynamicitems[0]);
-                putValue("items1",""+dynamicitems[1]);
-                putValue("items2",""+dynamicitems[2]);
-                putValue("items3",""+dynamicitems[3]);
-                putValue("items4",""+dynamicitems[4]);
+                for(int i=0;i<itemscounter;i++){
+                    putValue("items"+i,""+dynamicitems.get(i));
+                }
+
             }
-
-
+            // refresh different items status
             putValue("Lamp1Status",strLamp1Status);
             putValue("Lamp2Progress",""+myLamp2Progress);
             putValue("Lamp3Progress",""+myLamp3Progress);
@@ -397,84 +393,128 @@ public class LivingRoomActivity extends AppCompatActivity {
             putValue("TVChannel",""+myTVChannel);
             putValue("BlindsHeight",""+myBlindsHeight);
 
-            livingitems[0] = "Lamp1 is " + strLamp1Status;
-            livingitems[1] = "Lamp2 is " + myLamp2Progress + " degree";
-            livingitems[2] = "Lamp3 is " + myLamp3Progress + " and color is " + myLamp3Color;
-            livingitems[3] = "TV is tuned to channel " + myTVChannel;
-            livingitems[4] = "Blinds is tuned to  " + myBlindsHeight + "  cm high";
+            // set message format to display status
+            livingitems.set(0, "Lamp1 is " + strLamp1Status);
+            livingitems.set(1, "Lamp2 is " + myLamp2Progress + " luminance" );
+            livingitems.set(2, "Lamp3 is " + myLamp3Progress + " luminance and color is " + myLamp3Color);
+            livingitems.set(3, "TV is tuned to channel " + myTVChannel);
+            livingitems.set(4, "Blinds is tuned to  " + myBlindsHeight + "  cm high");
 
             displayList();
         }
     }
 
+    /**
+     * When using fragment, refresh status for lamp1 and display in the same activity
+     * @param lamp1status, Type String
+     */
     public void synclamp1(String lamp1status) {
         putValue("Lamp1Status",strLamp1Status);
 
         strLamp1Status = lamp1status;
-        livingitems[0] = "Lamp1 is " + strLamp1Status;
+        livingitems.set(0, "Lamp1 is " + strLamp1Status);
 
         displayList();
     }
 
-
+    /**
+     * When using fragment, refresh status for lamp2 and display in the same activity
+     * @param lamp2progress, Type int
+     */
     public void synclamp2(int lamp2progress) {
         myLamp2Progress = lamp2progress;
         putValue("Lamp2Progress",""+myLamp2Progress);
 
-        livingitems[1] = "Lamp2 is " + myLamp2Progress + " degree";
+        livingitems.set(1, "Lamp2 is " + myLamp2Progress + " luminance");
 
         displayList();
     }
 
+    /**
+     * When using fragment, refresh status for lamp3 and display in the same activity
+     * @param lamp3progress,Type int
+     * @param color, Type int
+     */
     public void synclamp3(int lamp3progress, int color) {
         myLamp3Progress = lamp3progress;
         myLamp3Color = color;
         putValue("Lamp3Progress",""+myLamp3Progress);
         putValue("Lamp3Color",""+myLamp3Color);
 
-        livingitems[2] = "Lamp3 is " + myLamp3Progress + " and color is " + myLamp3Color;
+        livingitems.set(2, "Lamp3 is " + myLamp3Progress + "  luminance and color is " + myLamp3Color);
 
         displayList();
     }
 
+    /**
+     * When using fragment, refresh status for tv and display in the same activity
+     * @param tvChannel, Type int
+     */
     public void synctv(int tvChannel) {
         myTVChannel = tvChannel;
         putValue("TVChannel",""+myTVChannel);
 
-        livingitems[3] = "TV is tuned to channel " + myTVChannel;
+        livingitems.set(3, "TV is tuned to channel " + myTVChannel);
 
         displayList();
     }
 
+    /**
+     * When using fragment, refresh status for blinds and display in the same activity
+     * @param blindsHeight, Type int
+     */
     public void syncblinds(int blindsHeight) {
         myBlindsHeight = blindsHeight;
         putValue("BlindsHeight",""+myBlindsHeight);
 
-        livingitems[4] = "Blinds is tuned to  " + myBlindsHeight + "  cm high";
+        livingitems.set(4, "Blinds is tuned to  " + myBlindsHeight + "  cm high");
 
         displayList();
     }
 
+    /**
+     * delete lamp1 fragment
+     * @param lamp1, Type Lamp1Activity
+     */
     public void removeFragmentLamp1(Lamp1Activity  lamp1){
         getSupportFragmentManager().beginTransaction().remove(lamp1).commit();
     }
 
+    /**
+     * delete lamp2 fragment
+     * @param lamp2, Type Lamp2Activity
+     */
     public void removeFragmentLamp2(Lamp2Activity  lamp2){
         getSupportFragmentManager().beginTransaction().remove(lamp2).commit();
     }
 
+    /**
+     * delete lamp3 fragment
+     * @param lamp3, TYpe Lamp3Activity
+     */
     public void removeFragmentLamp3(Lamp3Activity  lamp3){
         getSupportFragmentManager().beginTransaction().remove(lamp3).commit();
     }
 
+    /**
+     * delete tv fragment
+     * @param tv, Type TVActivity
+     */
     public void removeFragmentTV(TVActivity tv){
         getSupportFragmentManager().beginTransaction().remove(tv).commit();
     }
 
+    /**
+     * delete blinds fragment
+     * @param blinds, Type BlindsActivity
+     */
     public void removeFragmentBlinds(BlindsActivity blinds){
         getSupportFragmentManager().beginTransaction().remove(blinds).commit();
     }
 
+    /**
+     * self-defined method to read value from database
+     */
     public String getValue(String strname){
         livingDataHelper = new LivingRoomDatabaseHelper(this);
         db = livingDataHelper.getReadableDatabase();
@@ -488,8 +528,8 @@ public class LivingRoomActivity extends AppCompatActivity {
                 livingDataHelper.LVINGITEM_ID + " not null",
                 null, null, null, null, null);
 
+        // use cursor to read through database, if key value existed, then return value column
         int count = results.getCount();
-
         results.moveToFirst();
         while( ! results.isAfterLast() ){
             String str1 = results.getString(results.getColumnIndex(livingDataHelper.LVINGITEM_ID));
@@ -503,6 +543,11 @@ public class LivingRoomActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * put value into database
+     * @param strname, Type String
+     * @param value, String
+     */
     public void putValue(String strname, String value){
         livingDataHelper = new LivingRoomDatabaseHelper(this);
         db = livingDataHelper.getWritableDatabase();
@@ -524,58 +569,57 @@ public class LivingRoomActivity extends AppCompatActivity {
      * @param addordel, Type int
      */
     public void changeItems(int itemid,int addordel) {
+        // if item doesn't exist, user could not delete from dropbox show lists.
         int dynaitemid = -1;
         for (int i = 0; i < itemscounter; i++){
-            if (dynamicitems[i] == itemid) {
+            if (dynamicitems.get(i) == itemid) {
                 dynaitemid = i;
                 break;
             }
         }
+        // if user add one item and the item doesn't exist in lists, the new item is added into the listview
         if (addordel == 1 && dynaitemid < 0) {
-            if (itemscounter <= 4)
-                dynamicitems[itemscounter++] = itemid;
-        } else if (addordel == -1 && dynaitemid >= 0) {
+            //if (itemscounter <= 4)
+                dynamicitems.add(itemscounter++, itemid);
+        } else if (addordel == -1 && dynaitemid >= 0) {// if user delete one item and the item is in the lists, the item could be deleted
             if (itemscounter >= 0)
                 itemscounter--;
             for (int i = dynaitemid; i < itemscounter; i++)
-                dynamicitems[i] = dynamicitems[i + 1];
+                dynamicitems.set(i, dynamicitems.get(i + 1)); // the latter item take the position of previous item
         }
 
     }
 
-
+    /**
+     * get assess to database
+     */
     public class LivingStatus extends AsyncTask<String, Integer, String>{
         @Override
         protected String doInBackground(String... args){
             String in = "";
-            try{
-                livingDataHelper = new LivingRoomDatabaseHelper(ctx);
+            try{ // read into database
+                livingDataHelper = new LivingRoomDatabaseHelper(ctx); // read into database
                 db = livingDataHelper.getReadableDatabase();
-
-                //String query = String
-                //      .format("SELECT * FROM %s WHERE %s=%s", livingDataHelper.TABLE_NAME, livingDataHelper.LIVINGITEM_KEY,strname);
-                //results = db.rawQuery(query, null);
 
                 results = db.query(false, livingDataHelper.TABLE_NAME,
                         new String[]{ livingDataHelper.LVINGITEM_ID, livingDataHelper.LIVINGITEM_KEY, livingDataHelper.LIVINGITEM_VALUE},
                         livingDataHelper.LVINGITEM_ID + " not null",
                         null, null, null, null, null);
-
                 int count = results.getCount();
-
+                // set process speed when reading through database
                 results.moveToFirst();
                 while( ! results.isAfterLast() ){
                     String str2 = results.getString(results.getColumnIndex(livingDataHelper.LIVINGITEM_KEY));
                     if(str2.compareTo("Lamp1Status")==0){
-                        publishProgress(25);
+                        publishProgress(25); //stop when reading on lamp1
                         Thread.sleep(1000);
                     }
                     if(str2.compareTo("Lamp3Color")==0){
-                        publishProgress(50);
+                        publishProgress(50); // stop when reading on lamp3
                         Thread.sleep(1000);
                     }
                     if(str2.compareTo("BlindsHeight")==0){
-                        publishProgress(75);
+                        publishProgress(75);  //stop when reading on blinds
                         Thread.sleep(1000);
                     }
                     results.moveToNext();
@@ -588,20 +632,20 @@ public class LivingRoomActivity extends AppCompatActivity {
 
             return in;
         }
-
+        // to see if the file is existing
         public boolean fileExistance(String fname) {
             File file = getBaseContext().getFileStreamPath(fname);
             return file.exists();
         }
 
-
+        // show progressbar and make it visible
         public void onProgressUpdate(Integer... values) {
 
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.livingProgressBar);
             progressBar.setProgress(values[0]);
             progressBar.setVisibility(View.VISIBLE);
         }
-
+        // set progressbar invisible
         public void onPostExecute(String result) {
 
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.livingProgressBar);
