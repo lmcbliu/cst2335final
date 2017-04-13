@@ -25,10 +25,9 @@
 
     <Switch
         android:id="@+id/switchkitchenlight"
-        android:text="TURN ON LIGHT"
+        android:text="@string/kitchenlightturnon"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-
         android:gravity="clip_horizontal"
         />
 
@@ -41,5 +40,5 @@
         android:id="@+id/KitchenLightBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back"/>
+        android:text="@string/kitchenlightbackbutton"/>
 </LinearLayout>

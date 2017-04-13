@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.algonquin.cst2335final.MicrowaveActivity">
     <TextView
-        android:text="Enter time in seconds"
+        android:text="@string/microinputtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -32,7 +32,7 @@
         android:layout_alignParentStart="true" />
 
     <Button
-        android:text="START"
+        android:text="@string/microstartbuttontext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -41,7 +41,7 @@
         android:id="@+id/buttonMicStart" />
 
     <Button
-        android:text="Cancel"
+        android:text="@string/microresetbuttontext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonMicCancel"
@@ -61,7 +61,7 @@
         android:textSize="25dp"/>
 
     <Button
-        android:text="EXIT"
+        android:text="@string/microexitbuttontext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonMicCancel"
@@ -70,7 +70,7 @@
         android:id="@+id/buttonMicexit" />
 
     <ToggleButton
-        android:text="STOP"
+        android:text="@string/microoffbuttontext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonMicStop"

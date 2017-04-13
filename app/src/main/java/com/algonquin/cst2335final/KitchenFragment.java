@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,8 @@ import android.widget.ToggleButton;
 
 public class KitchenFragment extends Fragment  {
     protected KitchenActivity kitchenActivity;
-    long id;
-    Context context;
+    protected String id;
+    protected Context context;
     protected EditText inputTime;
     protected Button start;
     protected ToggleButton stop;
@@ -59,6 +60,11 @@ public class KitchenFragment extends Fragment  {
     protected ProgressBar progressBar;
     protected int progressStatus;
     Handler handler=new Handler();
+    protected boolean isTablet;
+    protected double tempofFridge;
+    protected double tempofFreezer;
+    protected String lightStatus;
+    protected int processofLight;
 
 
     public KitchenFragment(){}
@@ -67,21 +73,27 @@ public class KitchenFragment extends Fragment  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle=getArguments();
-        id=bundle.getLong("ID");
+        id=bundle.getString("ID");
+        tempofFridge=bundle.getDouble("Fridgetemp");
+        tempofFreezer=bundle.getDouble("FreezerTemp");
+        lightStatus=bundle.getString("lightStatus");
+        processofLight=bundle.getInt("progressOfLight");
+        isTablet=bundle.getBoolean("isTablet");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View gui=null;
-        switch((int)id){
-            case 0: gui=inflater.inflate(R.layout.activity_microwave,null);
-                    microwaveAction(gui);
-                    break;
-            case 1: gui=inflater.inflate(R.layout.activity_fridge,null);
-                fridgeAction(gui);
-                break;
-            case 2: gui=inflater.inflate(R.layout.activity_kitchen_light,null);
-               lightAction(gui);
-                break;
+
+        if(id.toLowerCase().contains("micro")||id.toLowerCase().contains("微波炉")){
+            gui=inflater.inflate(R.layout.activity_microwave,null);
+            microwaveAction(gui);
+        }
+        else if(id.toLowerCase().contains("fridge")||id.toLowerCase().contains("freezer")||id.toLowerCase().contains("冰")){
+            gui=inflater.inflate(R.layout.activity_fridge,null);
+            fridgeAction(gui);
+        }else if (id.toLowerCase().contains("light")||id.toLowerCase().contains("灯")){
+            gui=inflater.inflate(R.layout.activity_kitchen_light,null);
+            lightAction(gui);
         }
         return gui;
     }
@@ -90,15 +102,24 @@ public class KitchenFragment extends Fragment  {
 
         Button backB=(Button)view.findViewById(R.id.KitchenLightBack);
         backB.setOnClickListener((v)->{
-            getActivity().setResult(Activity.RESULT_OK);
-            getActivity().finish();
+            if(isTablet){
+                kitchenActivity.getValuefromfragment("lightStatus",""+lightStatus);
+                kitchenActivity.getValuefromfragment("progressOfLight",""+processofLight);
+                kitchenActivity.removeFragment(KitchenFragment.this);
+            }else {
+            Intent back=new Intent();
+            back.putExtra("lightStatus",lightStatus);//(string,string)
+            back.putExtra("progressOfLight",processofLight);//(string,int)
+            getActivity().setResult(0,back);
+            getActivity().finish();}
         });
         SeekBar lightSeekBar= (SeekBar)view.findViewById(R.id.kitchenLightProgress) ;
+        lightSeekBar.setProgress(processofLight);
 
         lightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                processofLight=progress;
             }
 
             @Override
@@ -115,6 +136,15 @@ public class KitchenFragment extends Fragment  {
         image=(ImageButton) view.findViewById(R.id.imagekitchenlight);
 
        aSwitch.setSelected(true);
+        if(lightStatus.compareTo("on")==0){
+            aSwitch.setChecked(true);
+            image.setImageResource(R.drawable.kitchenon);
+            lightSeekBar.setEnabled(true);
+        }
+        else{aSwitch.setChecked(false);
+            image.setImageResource(R.drawable.kitchenoff);
+            lightSeekBar.setEnabled(false);
+        }
 
         aSwitch.setOnCheckedChangeListener(
 
@@ -126,14 +156,16 @@ public class KitchenFragment extends Fragment  {
                         CharSequence text;
                         int duration;
                         if (aSwitch.isChecked()) {
-
-                            text = "Light is On";
+                            lightSeekBar.setEnabled(true);
+                            lightStatus="on";
+                            text = getString(R.string.kitchenlightison);
                             duration = Toast.LENGTH_SHORT;
                             image.setImageResource(R.drawable.kitchenon);
 
                         } else {
-
-                            text = "Light is OFF";
+                            lightStatus="off";
+                            lightSeekBar.setEnabled(false);
+                            text = getString(R.string.kitchenlightisoff);
                             duration = Toast.LENGTH_LONG;
                             image.setImageResource(R.drawable.kitchenoff);
 
@@ -156,14 +188,15 @@ public class KitchenFragment extends Fragment  {
         saveButton=(Button)gui.findViewById(R.id.buttonSave);
         progressBar=(ProgressBar)gui.findViewById(R.id.fridgeprogressbar);
 
-
+        textOfFreezer.setText(getActivity().getString(R.string.freezertempchagetext)+tempofFreezer+" °C");
+        textOfFridge.setText(getActivity().getString(R.string.fridgetempchangetext)+tempofFridge+" °C");
         setFreezerB.setOnClickListener(new View.OnClickListener(){
         //SET THE ACTION OF BUTTON
             @Override
             public void onClick(View view){
                 String temp=editFreezer.getText().toString();
-                textOfFreezer.setText("Freezer Temp is "+temp+" °C");
-
+                textOfFreezer.setText(getActivity().getString(R.string.freezertempchagetext)+temp+" °C");
+                tempofFreezer=Double.parseDouble(temp);
             }
 
         });
@@ -173,8 +206,9 @@ public class KitchenFragment extends Fragment  {
             @Override
             public void onClick(View view){
                 String temp=editFridge.getText().toString();
-                textOfFridge.setText("Fridge Temp is "+temp+" °C");
-
+                textOfFridge.setText(getActivity().getString(R.string.fridgetempchangetext)+temp+" °C");
+                tempofFridge=Double.parseDouble(temp);
+                Log.i("fridge temp",""+tempofFridge);
             }
 
         });
@@ -196,12 +230,22 @@ public class KitchenFragment extends Fragment  {
                         e.printStackTrace();
                     }
                     if(progressStatus>90){
-                        Intent resultIntent=new Intent();
-                        getActivity().setResult(Activity.RESULT_OK,resultIntent);
-                        getActivity().finish();}
+                       if(isTablet){
+                           kitchenActivity.getValuefromfragment("Fridgetemp",""+tempofFridge);
+                           kitchenActivity.getValuefromfragment("FreezerTemp",""+tempofFreezer);
+                           kitchenActivity.removeFragment(KitchenFragment.this);
+                       }
+                       else{
+                           Intent backdata=new Intent();
+                        backdata.putExtra("Fridgetemp",tempofFridge);
+                           Log.i("testingggggg",""+tempofFridge);
+                        backdata.putExtra("FreezerTemp",tempofFreezer);
+                           Log.i("testingggggg",""+tempofFreezer);
+                        getActivity().setResult(0,backdata);
+                        getActivity().finish();}}
                 }
             }).start();
-            Snackbar.make(gui,"TEMPERATURE SAVED SUCCESSFUL",Snackbar.LENGTH_LONG).setAction("Action",null).show();
+            Snackbar.make(gui,R.string.fridgesnackbartext,Snackbar.LENGTH_LONG).setAction("Action",null).show();
 
         });
 
@@ -231,11 +275,14 @@ public class KitchenFragment extends Fragment  {
             new CountDownTimer(timeSet,interval){
                 @Override
                 public void onFinish(){
-                    show.setText("Time up");
+                    show.setText(R.string.microtimefinishtext);
                     imgOfMic.setImageResource(R.drawable.microwaveoff);
-//                     Vibrator vibrator=(Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-//                     vibrator.vibrate(500);
-//                     vibrator.cancel();
+                    start.setEnabled(true);
+                    cancel.setEnabled(false);
+                    stop.setEnabled(false);
+                     Vibrator vibrator=(Vibrator)getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+                     vibrator.vibrate(500);
+                     vibrator.cancel();
                 }
                 @Override
                 public void onTick(long milluntilfinished){
@@ -252,7 +299,7 @@ public class KitchenFragment extends Fragment  {
         stop.setOnClickListener((v)->{
             if(stop.isChecked()){
                 isPause=true;
-                stop.setText("resume");
+                stop.setText(R.string.microresumebuttontext);
             }else{
                 isPause=false;
                 long timeSet= remainTime;
@@ -260,10 +307,14 @@ public class KitchenFragment extends Fragment  {
                 new CountDownTimer(timeSet,interval){
                     @Override
                     public void onFinish(){
-                        show.setText("Time up");
-//                       Vibrator vibrator=(Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-//                       vibrator.vibrate(500);
-//                       vibrator.cancel();
+                        show.setText(R.string.microtimefinishtext);
+                        imgOfMic.setImageResource(R.drawable.microwaveoff);
+                        start.setEnabled(true);
+                        cancel.setEnabled(false);
+                        stop.setEnabled(false);
+                       Vibrator vibrator=(Vibrator)getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+                       vibrator.vibrate(500);
+                       vibrator.cancel();
                     }
                     @Override
                     public void onTick(long milluntilfinished){
