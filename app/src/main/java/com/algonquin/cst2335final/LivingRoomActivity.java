@@ -232,10 +232,10 @@ public class LivingRoomActivity extends AppCompatActivity {
                         case 0: //lamp1
                             Lamp1Activity lamp1intent = new Lamp1Activity(LivingRoomActivity.this);
                             Bundle bundle = new Bundle();
-                            bundle.putString("Lamp1Status",strLamp1Status);
-                            bundle.putInt("ItemID",0);
-                            bundle.putInt("IsTablet",1);
-                            lamp1intent.setArguments(bundle);
+                            bundle.putString("Lamp1Status",strLamp1Status); // key
+                            bundle.putInt("ItemID",0); // value
+                            bundle.putInt("IsTablet",1); // boolean value for Tablet
+                            lamp1intent.setArguments(bundle);// pass data to fragement
                             getSupportFragmentManager().beginTransaction().replace(R.id.livingroomfragmentHolder, lamp1intent).commit();
                             break;
                         case 1://lamp2
@@ -243,8 +243,8 @@ public class LivingRoomActivity extends AppCompatActivity {
                             bundle = new Bundle();
                             bundle.putInt("Lamp2Progress", myLamp2Progress);
                             bundle.putInt("ItemID",1);
-                            bundle.putInt("IsTablet",1);
-                            lamp2intent.setArguments(bundle);
+                            bundle.putInt("IsTablet",1); // boolean value for Tablet
+                            lamp2intent.setArguments(bundle); // pass data
                             getSupportFragmentManager().beginTransaction().replace(R.id.livingroomfragmentHolder, lamp2intent).commit();
                             break;
                         case 2://lamp3
@@ -567,6 +567,9 @@ public class LivingRoomActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * When database doesn't exist, recreate database
+     */
     private void recreateTable(){
         db.execSQL(LivingRoomDatabaseHelper.DROP_TABLE_MESSAGE);
         db.execSQL(LivingRoomDatabaseHelper.CREATE_TABLE_MESSAGE);
