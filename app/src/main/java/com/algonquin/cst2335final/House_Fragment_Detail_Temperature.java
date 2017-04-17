@@ -5,8 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+/**
+ * the activity of the numberPickers which can access the fragment of the temperature
+ * @author Chen
+ * @version 1.0
+ * */
 public class House_Fragment_Detail_Temperature extends AppCompatActivity {
     Bundle tempBundle;
+
+    /**Override the onCreate method which can access the fragment of temperature
+     * @param savedInstanceState*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,23 +25,11 @@ public class House_Fragment_Detail_Temperature extends AppCompatActivity {
             bun.putBundle("tempBundle",tempBundle);
         }
         fragment.setArguments(bun);
-        Log.i("HousFragmentTemperature","startt ransaction");
-       // Intent intent = new Intent(House_Fragment_Detail_Temperature.this,HouseNumberPickers.class);
-       // startActivityForResult(intent,5);
+        Log.i("HousFragmentTemperature","start transaction");
+
         getFragmentManager().beginTransaction().replace(R.id.housefragmentholder,fragment).commit();
 
 
-    }
-
-
-
-    public void addItemToTheList(Bundle bundle){
-        if(bundle!= null) {
-            tempBundle = bundle;
-//            int hour = bundle.getInt("hour", 0);
-//            int min = bundle.getInt("min",0);
-//            int temp = bundle.getInt("temp",0);
-        }
     }
 
 }

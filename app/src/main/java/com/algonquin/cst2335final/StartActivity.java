@@ -11,8 +11,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+/**the start page of the application
+ * @version 1.0
+ * */
 public class StartActivity extends AppCompatActivity {
 
+    /**
+     * Override the onCreate and start the application
+     * @param savedInstanceState
+     * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +37,8 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
-
+    /**create the toolbar
+     * @param m*/
     public boolean onCreateOptionsMenu (Menu m){
 
         getMenuInflater().inflate(R.menu.toolbar_menu, m );
@@ -38,6 +46,9 @@ public class StartActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * action for the menu Item
+     * @param mi*/
     public boolean onOptionsItemSelected(MenuItem mi){
 
         int id =mi.getItemId();
