@@ -32,11 +32,9 @@ import java.util.Set;
 public class KitchenActivity extends AppCompatActivity {
 
     protected ListView listView;
-
     protected ArrayList<String> nameList=new ArrayList<>();
     protected Button returnButton;
     protected boolean isTablet;
-
     protected Cursor results;
     protected KitchenDatabaseHelper dbHelper;
     protected SQLiteDatabase db;
@@ -85,6 +83,7 @@ public class KitchenActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, itemselect);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
+
             //confirm to add the type of item
             Button confirm=(Button)v.findViewById(R.id.buttonOfkitchenItemSpinner);
             confirm.setOnClickListener((view1)->{
