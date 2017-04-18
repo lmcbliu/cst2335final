@@ -216,7 +216,7 @@ public class ListDetailHouseFragment extends Fragment {
                 }
                 HouseActivity.checkDeviceState();
             }
-        });
+        });//okk
         sw2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton a, boolean isChecked){

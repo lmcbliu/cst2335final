@@ -1,3 +1,8 @@
+/**
+ * @version 1.0
+ * @(#)ActivityDate.java 1.0 2017/04/19
+ * this is a part of project for CST2335_010 Android final Project;
+ * */
 package com.algonquin.cst2335final;
 
 import android.content.Intent;
@@ -11,15 +16,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-/**the start page of the application
- * @version 1.0
- * */
-public class StartActivity extends AppCompatActivity {
 
+
+/**
+ * This class is project start activity, it is the entry point and forward to other activity from here
+ * @version 1.0
+ * @author BO
+ */
+
+public class StartActivity extends AppCompatActivity {
     /**
-     * Override the onCreate and start the application
-     * @param savedInstanceState
+     * method onCreate creates activity
+     *  @param savedInstanceState is bundle
      * */
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
